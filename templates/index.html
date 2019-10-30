@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>Mortgage Calculator</h3>
+{% if message %}
+<p class="alert alert-success" role="alert">{{message | safe}}</p>
+{% endif %}
+
+{% if message2 %}
+<p class="alert alert-info" role="alert">{{message2 | safe}}</p>
+{% endif %}
+<div id="panel">
+
+  <form action="/submit" method="POST">
+    <p id="error" style="color: red; margin-top: 0%;"></p>
+    <p> <input type="text" name="priceFd" id="priceFd" required />
+      Purchase price (R)
+    </p>
+    <p> <input type="text" name="depositFd" id="depositFd" required />
+      Deposit (R)</p>
+    <p> <input type="text" name="interestFd" id="interestFd" required />
+      Interest Rate (%)</p>
+    <p> <input type="text" name="termFd" id="termFd" required />
+      Term (years)</p>
+
+    <div>
+      <div>
+        <button class="btn btn-secondary" id="mortgageCalc" onclick="return false">Calculate Monthly Payment</button>
+      </div>
+    </div>
+
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Purchase price (R)</th>
+          <th scope="col">Deposit (R)</th>
+          <th scope="col">Interest Rate (%)</th>
+          <th scope="col">Term (years)</th>
+          <th scope="col" style="color:green;">Amount due (R)</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td id="d1">-</td>
+          <td id="d2">-</td>
+          <td id="d3">-</td>
+          <td id="d4">-</td>
+          <td id="d5">-</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="result"></div>
+    <br>
+    <p class="alert alert-info" role="alert"> PLEASE ENTER YOUR NAME AND CLICK THE SAVE BUTTON TO SAVE YOUR DATA!</h6>
+      <br>
+      <input type="text" name="nameFd" id="nameFd" class="mortgageField" /><br><br>
+      <input type="submit" value="save" class="btn btn-primary mb-2" />
+      <input type="text" name="amountFd" id="amountFd" style="display: none;" />
+    </p>
+
+  </form>
+
+</div>
+
+<script>
+  $("#mortgageCalc").click(function () {
+    var Pr, Am, Tm, In, Dep, errorTxt = "invalid input";
+    Pr = parseInt($("#priceFd").val());
+    Tm = parseInt($("#termFd").val()) * 12;
+    In = parseFloat($("#interestFd").val()) / 1200;
+    Dep = parseFloat($("#depositFd").val());
+    Pr = Pr - Dep;
+    Am = (Pr * (In * Math.pow(1 + In, Tm))) / (Math.pow(1 + In, Tm) - 1);
+
+    if (!isNaN(Am)) {
+      $("#d5").val(Am.toFixed(2));
+      $("#amountFd").val(Am.toFixed(2));
+      document.getElementById("error").innerHTML = "";
+      populateTb();
+    }
+    else {
+      document.getElementById("error").innerHTML = errorTxt;
+      $("#d5").html('<h7 style="color:red;">Try to enter all your numbers correctly</h7>');
+    }
+    return false;
+  });
+</script>
+
+<script>
+  function populateTb() {
+    var pr = document.getElementById("priceFd").value;
+    var dp = document.getElementById("depositFd").value;
+    var rt = document.getElementById("interestFd").value;
+    var tm = document.getElementById("termFd").value;
+    var py = document.getElementById("d5").value;
+
+    document.getElementById("d1").innerHTML = pr;
+    document.getElementById("d2").innerHTML = dp;
+    document.getElementById("d3").innerHTML = rt;
+    document.getElementById("d4").innerHTML = tm;
+    document.getElementById("d5").innerHTML = py;
+
+    if (typeof (Storage) !== "undefined") {
+      // Store in memory
+      localStorage.setItem("price", pr);
+      localStorage.setItem("deposit", dp);
+      localStorage.setItem("interest", rt);
+      localStorage.setItem("term", tm);
+      localStorage.setItem("payment", py);
+    }
+  }
+</script>
+
+
+<script>
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      document.getElementById("priceFd").focus();
+
+      var pr = document.getElementById("priceFd").value;
+      var dp = document.getElementById("depositFd").value;
+      var rt = document.getElementById("interestFd").value;
+      var tm = document.getElementById("termFd").value;
+      var py = document.getElementById("d5").value;
+
+      document.getElementById("d1").innerHTML = pr;
+      document.getElementById("d2").innerHTML = dp;
+      document.getElementById("d3").innerHTML = rt;
+      document.getElementById("d4").innerHTML = tm;
+      document.getElementById("d5").innerHTML = tm;
+
+      if (typeof (Storage) !== "undefined") {
+        //   Retrieve from memory 
+        document.getElementById("d1").innerHTML = localStorage.getItem("price");
+        document.getElementById("d2").innerHTML = localStorage.getItem("deposit");
+        document.getElementById("d3").innerHTML = localStorage.getItem("interest");
+        document.getElementById("d4").innerHTML = localStorage.getItem("term");
+        document.getElementById("d5").innerHTML = localStorage.getItem("payment");
+      }
+    });
+  })();
+</script>
+
+{% endblock content %}
