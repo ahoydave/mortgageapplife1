@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fe67028f75429bd8aaf676201960ec9f"
-ENV = "prod"
+ENV = "dev"
 
 if ENV == "dev":
     app.debug = True

@@ -55,12 +55,11 @@
 
     <div id="result"></div>
     <br>
-    <p class="alert alert-info" role="alert"> PLEASE ENTER YOUR NAME AND CLICK THE SAVE BUTTON TO SAVE YOUR DATA!</h6>
+    <p class="alert alert-info" role="alert">  ENTER YOUR NAME AND CLICK THE SAVE BUTTON TO SAVE YOUR DATA!
       <br>
       <input type="text" name="nameFd" id="nameFd" class="mortgageField" /><br><br>
       <input type="submit" value="save" class="btn btn-primary mb-2" />
-      <input type="text" name="amountFd" id="amountFd" style="display: none;" />
-    </p>
+      <input type="text" name="amountFd" id="amountFd" style="display: none;" /></p>
 
   </form>
 
@@ -69,13 +68,15 @@
 <script>
   $("#mortgageCalc").click(function () {
     var Pr, Am, Tm, In, Dep, errorTxt = "invalid input";
+
     Pr = parseInt($("#priceFd").val());
     Tm = parseInt($("#termFd").val()) * 12;
     In = parseFloat($("#interestFd").val()) / 1200;
     Dep = parseFloat($("#depositFd").val());
     Pr = Pr - Dep;
     Am = (Pr * (In * Math.pow(1 + In, Tm))) / (Math.pow(1 + In, Tm) - 1);
-
+  
+  // Error checking
     if (!isNaN(Am)) {
       $("#d5").val(Am.toFixed(2));
       $("#amountFd").val(Am.toFixed(2));
@@ -91,6 +92,7 @@
 </script>
 
 <script>
+  // Populate table with values
   function populateTb() {
     var pr = document.getElementById("priceFd").value;
     var dp = document.getElementById("depositFd").value;
@@ -105,7 +107,7 @@
     document.getElementById("d5").innerHTML = py;
 
     if (typeof (Storage) !== "undefined") {
-      // Store in memory
+      // Store value in memory
       localStorage.setItem("price", pr);
       localStorage.setItem("deposit", dp);
       localStorage.setItem("interest", rt);
@@ -118,7 +120,7 @@
 
 <script>
   (function () {
-    'use strict';
+  
     window.addEventListener('load', function () {
       document.getElementById("priceFd").focus();
 
@@ -135,7 +137,7 @@
       document.getElementById("d5").innerHTML = tm;
 
       if (typeof (Storage) !== "undefined") {
-        //   Retrieve from memory 
+        //   Retrieve values from memory 
         document.getElementById("d1").innerHTML = localStorage.getItem("price");
         document.getElementById("d2").innerHTML = localStorage.getItem("deposit");
         document.getElementById("d3").innerHTML = localStorage.getItem("interest");
