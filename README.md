@@ -27,6 +27,12 @@ sqlite:///C:\\absolute\\path\\to\\foo.db
 r'sqlite:///C:\absolute\path\to\foo.db'
 
 ##################################################
+#Create table with:
+$ python
+>>> from app import db
+>>> db.create_all()
+>>>exit()
+
 
 ﻿# how to run
 with, $ python app.py
